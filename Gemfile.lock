@@ -219,6 +219,7 @@ DEPENDENCIES
   github-pages (~> 217)
   i18n (~> 0.7)
   jekyll-feed (~> 0.12)
+  jekyll-remote-theme
   jekyll-sass-converter (= 1.5.2)
   mercenary (~> 0.3.3)
   minima (~> 2.5)
