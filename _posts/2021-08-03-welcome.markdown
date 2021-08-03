@@ -13,6 +13,7 @@ finished: true
 
 I hope to use this blog site to record my blogs, reading notes and so on.
 
-## ÖĞÎÄ
+## ä¸­æ–‡
 
-²»³öÒâÍâÓ¦¸Ã´ó²¿·Öblog»áÓÃÖĞÎÄÀ´Ğ´¡£
+å†è¯•è¯•çœ‹ä¸­æ–‡è¡Œä¸è¡Œï¼Œä¸èƒ½ç”¨UTF-8å­˜ç›˜å°±ç¦»è°±ã€‚
+
