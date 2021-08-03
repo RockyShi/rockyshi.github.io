@@ -18,9 +18,6 @@ gem "jekyll-sass-converter", "= 1.5.2"
 gem "mercenary", "~> 0.3.3"
 gem "i18n", "~> 0.7"
 
-# Use the Pages remote theme
-gem "jekyll-remote-theme"
-
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
 # uncomment the line below. To upgrade, run `bundle update github-pages`.
 gem "github-pages", "~> 217", group: :jekyll_plugins
