@@ -1,0 +1,16 @@
+---
+layout: post
+title: "Welcome to My Blog"
+subtitle: "The first blog written by me."
+date: 2021-08-03
+author: Rocky Shi
+category: dairy
+tags: blog
+finished: true
+---
+
+## Welcome
+
+I created the blog today by using GitHub Pages, Jekyll, Nice Blog Theme.
+
+I hope to use this blog site to record my blogs, reading notes and so on.
