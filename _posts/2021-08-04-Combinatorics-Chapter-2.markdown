@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Combinatorics Chapter 2"
-subtitle: "Reading notes and excercises of <The combinatorics in programming>"
+subtitle: "Reading notes and excercises of \<The combinatorics in programming\>"
 date: 2021-08-04
 author: Rocky Shi
 category: notes
@@ -11,6 +11,7 @@ finished: false
 
 ## 笔记
     无，这一章概念和例子比较多，并不难理解。
+    ***
 ## 书面练习
     1. 请构造一个7阶幻方
        解： 用罗伯法，可得到以下结果
@@ -57,7 +58,8 @@ finished: false
        1. 用染色法证明。国际象棋棋盘原本就是黑白相间的格子，一块骨牌恰好可以覆盖1块黑格和1块白格。8*8的完整棋盘有32个黑格和32个白格，所以32块骨牌可以覆盖。
        2. 对角上的格子是同色的格子，所以割去之后剩下32个黑格+30个白格或者30个黑格+32个白格，因此用31块骨牌是无法覆盖这些格子的。
        3. 证明完毕。
-        
+    ***
+    
 ## 编程练习
     9. 输入一个奇数n(3<=n<=19),输出一个n阶的幻方。
        [n阶幻方的程序实现](rockyshi.github.io/notes/Magic-Square-Solution.html)
@@ -67,39 +69,41 @@ finished: false
               22 / 5 = 4.4
               45/56 = 0.803(571428)
         程序如下：
-        > int main()
-        > {
-        >   size_t flag[10] = { 0 };
-        >   std::string output;
-        >   output += std::to_string(N);
-        >   output += " / ";
-        >   output += std::to_string(D);
-        >   output += " = ";
-        >   output += std::to_string(N / D);
+        ~~~   
+        int main()
+        {
+            size_t flag[10] = { 0 };    
+            std::string output;  
+            output += std::to_string(N);  
+            output += " / ";  
+            output += std::to_string(D);  
+            output += " = ";  
+            output += std::to_string(N / D);  
 
-        >   int rest = N % D;
-        >   if (rest != 0)
-        >   {
-        >       output += ".";
-        >   }
-        >   while (rest != 0)
-        >   {
-        >       int r = rest * 10 / D;
-        >       if (flag[r] == 0)
-        >       {
-        >           flag[r] = output.length();
-        >       }
-        >       else
-        >       {
-        >           output.insert(flag[r], "(");
-        >           output += ")";
-        >           break;
-        >       }
-        >       output += std::to_string(r);
-        >       rest = (rest * 10) % D;
-        >   }
-        >   printf("%s\n", output.c_str());
-        > }
+            int rest = N % D;  
+            if (rest != 0)  
+            {  
+                output += ".";  
+            }  
+            while (rest != 0)  
+            {  
+                int r = rest * 10 / D;  
+                if (flag[r] == 0)  
+                {  
+                    flag[r] = output.length();  
+                }  
+                else  
+                {  
+                    output.insert(flag[r], "(");  
+                    output += ")";  
+                    break;  
+                }  
+                output += std::to_string(r);  
+                rest = (rest * 10) % D;  
+            }  
+            printf("%s\n", output.c_str());  
+        }
+        ~~~
 
 ## 一些说明和感想
    离开学校这么久，数学证明题果然还是有点难度，有些题目我完全是凭记忆答出来的。第7题第8题我记得很清楚，是年少时参加奥数培训，讲染色法的经典题目。
