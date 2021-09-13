@@ -97,11 +97,275 @@ finished: false
     2.3.3.2.1 ①=⑨=B → ⑤=⑩=A → ②=C, 则A有4个③⑤⑧⑩，C有3个②④⑥，B有2个①⑨，⑦只能是D，且只有1个。目前无矛盾。
               
 2.4 **验证2.3.3.2.1的结果的确为正确结果**
+    ①=B,②=C,③=A,④=C,⑤=A,⑥=C,⑦=D,⑧=A,⑨=B,⑩=A
 
 ### 3 编程实现
+- 为了代码的美观以及一贯以来的习惯，决定用递归而非循环来枚举每道题的答案。
+- 利用第一节对每道题的分析进行节点生成和剪枝。
+- 不按照题目的自然顺序而是信息量的大小来枚举以加快收敛速度。
+- 每一节点生成尽可能多的答案。
 
+  符合以上几条的程序花了我一个下午的时间，最终生成了1177个节点，其中114个节点被剪枝，766个叶节点被检查，耗时0.002秒。
+  比较让人郁闷的是，随后我花了几分钟写了一个暴力计算的10层嵌套循环，复用了之前方案里的最终检查函数，结果是该函数被调用401989次，耗时0.037秒。
+  也就是说，我花了一下午的时间，把这个程序优化到了暴力枚举法效率的18.5倍，然而程序复杂了太多，很难维护。
+  其中带来最大麻烦的是最后一条，模仿人类思维的方式，选择了某个题目的答案之后，如果能够推理出其他题目的答案，也会将其设上。这一做法极大地减少了节点的数量，但因此带来的复杂度也是相当的麻烦。
+  从竞赛的角度来说，这一优化无可厚非。但从工程角度来说，这就是个过度优化的极佳范本。
 
+  程序太长，就不附上全部代码了。下面是检测某一道题是否符合要求的函数，两种实现都用到了，算是核心代码了:)
+  ```
+  bool check_answer(char* answers, *int id, char answer)
+  {
+    switch (id)
+    {
+    case 1:
+        break;
+    case 2:
+        if (answers[5])
+        {
+            switch (answer)
+            {
+            case 'a':
+                return answers[5] == 'c';
+            case 'b':
+                return answers[5] == 'd';
+            case 'c':
+                return answers[5] == 'a';
+            case 'd':
+                return answers[5] == 'b';
+            default:
+                assert(0 || "error answer");
+                return false;
+            }
+        }
+        break;
+    case 3:
+        if (answers[2] && answers[4] && answers[6])
+        {
+            switch (answer)
+            {
+            case 'a':
+                return (answers[2] == answers[4] && answers[4] == answers[6]);
+            case 'b':
+                return (answers[2] == 'b' && answers[4] == 'b' && answers[6] != 'b');
+            case 'c':
+                return (answers[2] != 'c' && answers[4] == 'c' && answers[6] == 'c');
+            case 'd':
+                return (answers[2] == 'd' && answers[4] != 'd' && answers[6] == 'd');
+            default:
+                assert(0 || "error answer");
+                return false;
+            }
+        }
+        break;
+    case 4:
+        switch (answer)
+        {
+        case 'a':
+            if (answers[1] && answers[5] && answers[1] != answers[5])
+            {
+                return false;
+            }
+            break;
+        case 'b':
+            if (answers[2] && answers[7] && answers[2] != answers[7])
+            {
+                return false;
+            }
+            break;
+        case 'c':
+            if (answers[1] && answers[9] && answers[1] != answers[9])
+            {
+                return false;
+            }
+            break;
+        case 'd':
+            if (answers[6] && answers[10] && answers[6] != answers[10])
+            {
+                return false;
+            }
+            break;
+        default:
+            assert(0 || "error answer");
+            return false;
+        }
+        break;
+    case 5:
+        switch (answers[2])
+        {
+        case '\0':
+            break;
+        case 'a':
+            if (answer != 'c')
+                return false;
+            break;
+        case 'b':
+            if (answer != 'd')
+                return false;
+            break;
+        case 'c':
+            if (answer != 'a')
+                return false;
+            break;
+        case 'd':
+            if (answer != 'b')
+                return false;
+            break;
+        default:
+            assert(0 || "error answer");
+            return false;
+        }
+        switch (answer)
+        {
+        case 'a':
+            return answers[8] == 'a';
+        case 'b':
+            return answers[4] == 'b';
+        case 'c':
+            return answers[9] == 'c';
+        case 'd':
+            return answers[7] == 'd';
+        default:
+            assert(0 || "error answer");
+            return false;
+        }
+        break;
+    case 6:
+        {
+            bool result;
+            switch (answer)
+            {
+            case 'a':
+                result = equal_answers({ 8,2,4 });
+                break;
+            case 'b':
+                result = equal_answers({ 6,1,8 });
+                break;
+            case 'c':
+                result = equal_answers({ 8,3,10 });
+                break;
+            case 'd':
+                result = equal_answers({ 8,5,9 });
+                break;
+            default:
+                assert(0 || "error answer");
+                return false;
+            }
+            return result;
+        }
+        break;
+    case 7:
+        if(answers_count[0] + answers_count[1] +
+            answers_count[2] + answers_count[3] == 10) 
+        {   
+            int min = 11, count = 0;
+            char a7;
+            for (int i=0;i<4;i++)
+            {
+                if (answers_count[i] < min)
+                {
+                    min = answers_count[i];
+                    a7 = 'a' + i;
+                    count = 1;
+                }
+                else if (answers_count[i] == min)
+                {
+                    count++;
+                }
+            }
+            if (count > 1)
+                return false;
+            switch (a7)
+            {
+            case 'a':
+                return answer == 'c';
+            case 'b':
+                return answer == 'b';
+            case 'c':
+                return answer == 'a';
+            case 'd':
+                return answer == 'd';
+            default:
+                assert(0 || "error answer");
+                return false;
+            }
+        }
+        break;
+    case 8:
+        if (answers[1])
+        {
+            switch (answer)
+            {
+            case 'a':
+                return !check_neighbour(7) && check_neighbour(5) && check_neighbour(2) && check_neighbour(10);
+            case 'b':
+                return check_neighbour(7) && !check_neighbour(5) && check_neighbour(2) && check_neighbour(10);
+            case 'c':
+                return check_neighbour(7) && check_neighbour(5) && !check_neighbour(2) && check_neighbour(10);
+            case 'd':
+                return check_neighbour(7) && check_neighbour(5) && check_neighbour(2) && !check_neighbour(10);
+            default:
+                assert(0 || "error answer");
+                return false;
+            }
+        }
+        break;
+    case 9:
+        if (answers[1] && answers[9] && answers[5])
+        {
+            switch (answer)
+            {
+            case 'a':
+                return answers[6] && check_pairs(6);
+            case 'b':
+                return answers[10] && check_pairs(10);
+            case 'c':
+                return answers[2] && check_pairs(2);
+            case 'd':
+                return answers[9] && check_pairs(9);
+            default:
+                assert(0 || "error answer");
+                return false;
+            }
+        }
+        break;
+    case 10:
+        if (answers_count[0] + answers_count[1] +
+            answers_count[2] + answers_count[3] == 10)
+        {
+            int min = 11, max = 0;
+            for (auto i = 0; i < 4; i++)
+            {
+                if (answers_count[i] < min)
+                    min = answers_count[i];
+                if (answers_count[i] > max)
+                    max = answers_count[i];
+            }
+            switch (answer)
+            {
+            case 'a':
+                return (max - min == 3);
+            case 'b':
+                return(max - min == 2);
+            case 'c':
+                return (max - min == 4);
+            case 'd':
+                return(max - min == 1);
+            default:
+                assert(0 || "error answer");
+                return false;
+            }
+        }
+        break;
+    default:
+        assert(0, "Error id");
+        return false;
+    }
+    return true;
+  }
+  ```
 ## 更新日志
 - 9/10 完成纸上推理，耗时72分钟。  
        实际做题时第一部分的分析也不会写这么详细，而是遇到相关题目再回头确认。  
        如果不是码字而是在草稿纸上画思维导图，应该能更快一些。
+- 9/12 完成程序，耗时5个多小时，期间大大小小的bug修了十几个。还好有随时加assert的好习惯，不然好些bug会很难发现。  
+       就算到现在，应该还有bug没修掉，我应该只是幸运的在触发bug之前找到了答案。 
